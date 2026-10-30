@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Catálogo · TechGear{% endblock %}
+{% block content %}
+<h1>Catálogo de productos</h1>
+<form method="get" style="margin-bottom:16px">
+  <input name="categoria" value="{{ categoria }}" placeholder="Filtrar por categoría">
+  <button type="submit" style="margin-top:0">Filtrar</button>
+</form>
+<div class="grid">
+  {% for p in productos %}
+  <article class="card">
+    {% if p.imagen_url %}<img src="{{ p.imagen_url }}" alt="{{ p.nombre }}">{% else %}<div class="noimg"></div>{% endif %}
+    <div>
+      <span class="tag">{{ p.categoria }}</span>
+      <h3>{{ p.nombre }}</h3>
+      <p>{{ p.descripcion }}</p>
+      <p class="precio">${{ p.precio|floatformat:"0g" }}</p>
+      <small>{% if p.stock > 0 %}{{ p.stock }} disponibles{% else %}Agotado{% endif %}</small>
+    </div>
+  </article>
+  {% empty %}
+  <p>No hay productos para mostrar.</p>
+  {% endfor %}
+</div>
+{% endblock %}

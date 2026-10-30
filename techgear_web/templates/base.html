@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}TechGear{% endblock %}</title>
+  <style>
+    *{box-sizing:border-box} body{margin:0;font-family:system-ui,sans-serif;background:#f4f6f8;color:#1f2933}
+    nav{background:#111827;color:#fff;padding:14px 24px;display:flex;justify-content:space-between;align-items:center}
+    nav a{color:#fff;text-decoration:none;margin-left:16px} nav .logo{font-weight:700;font-size:1.2rem;margin:0}
+    main{max-width:1100px;margin:24px auto;padding:0 16px}
+    .msg{padding:10px 14px;border-radius:6px;margin-bottom:12px}
+    .msg.error{background:#fde2e2;color:#9b1c1c}.msg.success{background:#d9f5e3;color:#116b35}
+    .msg.info,.msg.warning{background:#e0ecff;color:#1e40af}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:18px}
+    .card{background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px #0002;display:flex;flex-direction:column}
+    .card img,.card .noimg{width:100%;height:160px;object-fit:cover;background:#e5e7eb}
+    .card div{padding:14px}.precio{font-weight:700;font-size:1.1rem;color:#0b6bcb}
+    .tag{font-size:.75rem;background:#e5e7eb;border-radius:4px;padding:2px 6px}
+    form.box{background:#fff;max-width:400px;margin:40px auto;padding:24px;border-radius:10px;box-shadow:0 1px 4px #0002}
+    form.box label{display:block;margin-top:12px;font-weight:600}
+    form.box input{width:100%;padding:10px;margin-top:4px;border:1px solid #cbd2d9;border-radius:6px}
+    button,.btn{background:#0b6bcb;color:#fff;border:0;padding:10px 16px;border-radius:6px;cursor:pointer;margin-top:16px;text-decoration:none}
+  </style>
+</head>
+<body>
+<nav>
+  <a class="logo" href="{% url 'catalogo' %}">TechGear</a>
+  <div>
+    <a href="{% url 'catalogo' %}">Catálogo</a>
+    {% if request.session.usuario %}
+      <span>Hola, {{ request.session.usuario.nombre }} ({{ request.session.usuario.rol }})</span>
+      <a href="{% url 'logout' %}">Salir</a>
+    {% else %}
+      <a href="{% url 'login' %}">Iniciar sesión</a>
+      <a href="{% url 'registro' %}">Registrarse</a>
+    {% endif %}
+  </div>
+</nav>
+<main>
+  {% for m in messages %}<div class="msg {{ m.tags }}">{{ m }}</div>{% endfor %}
+  {% block content %}{% endblock %}
+</main>
+</body>
+</html>
