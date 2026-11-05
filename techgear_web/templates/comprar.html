@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Comprar · TechGear{% endblock %}
+{% block content %}
+<form class="box" method="post">
+  {% csrf_token %}
+  <h2>Comprar: {{ producto.nombre }}</h2>
+  <p class="precio">${{ producto.precio|floatformat:"0g" }} c/u</p>
+  <small>{{ producto.stock }} disponibles</small>
+
+  <label for="cantidad">Cantidad</label>
+  <input type="number" id="cantidad" name="cantidad" min="1" max="{{ producto.stock }}" value="1" required>
+
+  <label for="direccion">Dirección de envío</label>
+  <input type="text" id="direccion" name="direccion" minlength="5" required>
+
+  <button type="submit">Confirmar pedido</button>
+  <p><a href="{% url 'catalogo' %}">Cancelar</a></p>
+</form>
+{% endblock %}

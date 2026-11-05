@@ -1,7 +1,7 @@
 from datetime import datetime
 from enum import Enum
-from typing import List
-from pydantic import BaseModel, EmailStr, Field
+from typing import List, Union
+from pydantic import BaseModel, Field
 
 
 class EstadoPedido(str, Enum):
@@ -22,9 +22,6 @@ class ItemPedidoOut(ItemPedido):
 
 
 class PedidoCreate(BaseModel):
-    usuario_id: int            # id del usuario en Django
-    usuario_email: EmailStr
-    usuario_nombre: str = Field(..., min_length=2)
     items: List[ItemPedido] = Field(..., min_length=1)
     direccion_envio: str = Field(..., min_length=5)
 
@@ -35,7 +32,7 @@ class PedidoEstadoUpdate(BaseModel):
 
 class PedidoOut(BaseModel):
     id: str
-    usuario_id: int
+    usuario_id: Union[str, int]   # int = pedidos de prueba antiguos
     items: List[ItemPedidoOut]
     direccion_envio: str
     total: float

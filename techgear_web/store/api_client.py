@@ -46,3 +46,22 @@ def listar_productos(categoria=None):
 
 def crear_producto(datos):
     return _request("POST", "/productos/", api_key=settings.API_KEY, json=datos)
+
+def obtener_producto(producto_id):
+    return _request("GET", f"/productos/{producto_id}")
+
+
+def crear_pedido(token, items, direccion):
+    return _request("POST", "/pedidos/", token=token,
+                    json={"items": items, "direccion_envio": direccion})
+
+
+def mis_pedidos(token):
+    return _request("GET", "/pedidos/mios", token=token)
+
+def actualizar_producto(producto_id, datos):
+    return _request("PUT", f"/productos/{producto_id}", api_key=settings.API_KEY, json=datos)
+
+
+def eliminar_producto(producto_id):
+    return _request("DELETE", f"/productos/{producto_id}", api_key=settings.API_KEY)

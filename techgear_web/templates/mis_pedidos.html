@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Mis pedidos · TechGear{% endblock %}
+{% block content %}
+<h1>Mis pedidos</h1>
+{% for p in pedidos %}
+<article class="card" style="margin-bottom:16px">
+  <div>
+    <span class="tag">{{ p.estado }}</span>
+    <small> · {{ p.fecha|date:"d/m/Y H:i" }}</small>
+    <ul>
+      {% for i in p.items %}
+      <li>{{ i.cantidad }} × {{ i.nombre }} (${{ i.precio_unitario|floatformat:"0g" }} c/u)</li>
+      {% endfor %}
+    </ul>
+    <p>Envío a: {{ p.direccion_envio }}</p>
+    <p class="precio">Total: ${{ p.total|floatformat:"0g" }}</p>
+  </div>
+</article>
+{% empty %}
+<p>Aún no has hecho pedidos. <a href="{% url 'catalogo' %}">Ver el catálogo</a></p>
+{% endfor %}
+{% endblock %}

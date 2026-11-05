@@ -1,21 +1,34 @@
 {% extends "base.html" %}
-{% block title %}Catálogo · TechGear{% endblock %}
+{% block title %}Catálogo de productos · TechGear{% endblock %}
+{% block meta_description %}Explora el catálogo de TechGear: productos de cuidado personal con stock disponible y compra en línea.{% endblock %}
 {% block content %}
-<h1>Catálogo de productos</h1>
-<form method="get" style="margin-bottom:16px">
-  <input name="categoria" value="{{ categoria }}" placeholder="Filtrar por categoría">
-  <button type="submit" style="margin-top:0">Filtrar</button>
+<h1>Nuestro catálogo</h1>
+<p class="subtitulo">Productos para consentirte.</p>
+
+<form method="get" class="filtro" role="search">
+  <label for="categoria" class="sr-only">Filtrar por categoría</label>
+  <input id="categoria" name="categoria" value="{{ categoria }}" placeholder="Filtrar por categoría">
+  <button type="submit">Filtrar</button>
 </form>
+
 <div class="grid">
   {% for p in productos %}
   <article class="card">
-    {% if p.imagen_url %}<img src="{{ p.imagen_url }}" alt="{{ p.nombre }}">{% else %}<div class="noimg"></div>{% endif %}
+    {% if p.imagen_url %}
+      <img src="{{ p.imagen_url }}" alt="Foto de {{ p.nombre }}" width="400" height="210"
+           {% if forloop.counter > 4 %}loading="lazy"{% endif %} decoding="async">
+    {% else %}
+      <div class="noimg" aria-hidden="true"></div>
+    {% endif %}
     <div>
       <span class="tag">{{ p.categoria }}</span>
-      <h3>{{ p.nombre }}</h3>
+      <h2>{{ p.nombre }}</h2>
       <p>{{ p.descripcion }}</p>
       <p class="precio">${{ p.precio|floatformat:"0g" }}</p>
       <small>{% if p.stock > 0 %}{{ p.stock }} disponibles{% else %}Agotado{% endif %}</small>
+      {% if p.stock > 0 and request.session.usuario.rol != "administrador" %}
+        <a class="btn" href="{% url 'comprar' p.id %}" aria-label="Comprar {{ p.nombre }}">Comprar</a>
+      {% endif %}
     </div>
   </article>
   {% empty %}

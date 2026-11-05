@@ -4,23 +4,87 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}TechGear{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}TechGear: tienda en línea de productos de cuidado personal. Compra fácil y seguro.{% endblock %}">
+  <meta name="theme-color" content="#b4586b">
+
+  <!-- Favicon: cambia el emoji por el que quieras -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧴</text></svg>">
+
   <style>
-    *{box-sizing:border-box} body{margin:0;font-family:system-ui,sans-serif;background:#f4f6f8;color:#1f2933}
-    nav{background:#111827;color:#fff;padding:14px 24px;display:flex;justify-content:space-between;align-items:center}
-    nav a{color:#fff;text-decoration:none;margin-left:16px} nav .logo{font-weight:700;font-size:1.2rem;margin:0}
-    main{max-width:1100px;margin:24px auto;padding:0 16px}
-    .msg{padding:10px 14px;border-radius:6px;margin-bottom:12px}
-    .msg.error{background:#fde2e2;color:#9b1c1c}.msg.success{background:#d9f5e3;color:#116b35}
-    .msg.info,.msg.warning{background:#e0ecff;color:#1e40af}
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:18px}
-    .card{background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px #0002;display:flex;flex-direction:column}
-    .card img,.card .noimg{width:100%;height:160px;object-fit:cover;background:#e5e7eb}
-    .card div{padding:14px}.precio{font-weight:700;font-size:1.1rem;color:#0b6bcb}
-    .tag{font-size:.75rem;background:#e5e7eb;border-radius:4px;padding:2px 6px}
-    form.box{background:#fff;max-width:400px;margin:40px auto;padding:24px;border-radius:10px;box-shadow:0 1px 4px #0002}
-    form.box label{display:block;margin-top:12px;font-weight:600}
-    form.box input{width:100%;padding:10px;margin-top:4px;border:1px solid #cbd2d9;border-radius:6px}
-    button,.btn{background:#0b6bcb;color:#fff;border:0;padding:10px 16px;border-radius:6px;cursor:pointer;margin-top:16px;text-decoration:none}
+    :root{
+      --primary:#b4586b;      /* color principal: botones y logo */
+      --primary-dark:#8f4256; /* al pasar el mouse */
+      --accent:#f4d9d0;       /* detalles suaves */
+      --bg:#fdf8f5;           /* fondo de la página */
+      --text:#3b2f2f;
+      --muted:#7a6a6a;
+      --radius:16px;
+    }
+    *{box-sizing:border-box}
+    html{-webkit-text-size-adjust:100%}
+    img{max-width:100%;height:auto}
+    body{margin:0;font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column}
+    h1,h2,h3{font-family:Georgia,'Times New Roman',serif;margin:.2em 0 .5em}
+    h3{font-size:1.15rem;margin:10px 0 6px}
+
+    nav{background:#fff;border-bottom:1px solid var(--accent);padding:14px 28px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;position:sticky;top:0;z-index:10}
+    nav a{display:inline-block;padding:10px 6px;color:var(--text);text-decoration:none;margin-left:18px;font-weight:500}
+    nav a:hover{color:var(--primary)}
+    nav span{margin-left:18px;color:var(--muted);font-size:.9rem}
+    nav .logo{font-family:Georgia,'Times New Roman',serif;font-size:1.6rem;font-weight:700;color:var(--primary);margin:0}
+
+    main{flex:1;width:100%;max-width:1100px;margin:28px auto;padding:0 16px}
+    footer{text-align:center;color:var(--muted);font-size:.85rem;padding:24px 16px;border-top:1px solid var(--accent);background:#fff}
+
+    .msg{padding:12px 16px;border-radius:12px;margin-bottom:14px}
+    .msg.error{background:#fde2e2;color:#9b1c1c}
+    .msg.success{background:#dff5e6;color:#116b35}
+    .msg.info,.msg.warning{background:#fff1d6;color:#8a5a00}
+
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:22px}
+    .card{background:#fff;border-radius:var(--radius);overflow:hidden;box-shadow:0 4px 18px rgba(120,70,70,.10);display:flex;flex-direction:column;transition:transform .2s,box-shadow .2s}
+    .card:hover{transform:translateY(-4px);box-shadow:0 10px 26px rgba(120,70,70,.16)}
+    .card img,.card .noimg{width:100%;height:210px;object-fit:cover;background:linear-gradient(135deg,var(--accent),#fff)}
+    .card > div:not(.noimg){padding:16px;display:flex;flex-direction:column;flex:1}
+    .card p{margin:4px 0;color:var(--muted);font-size:.9rem}
+    .card .precio{color:var(--primary);font-weight:600;font-size:1.25rem;margin:8px 0}
+    .card small{display:block;color:var(--muted);margin-bottom:12px}
+    .card .btn{display:block;text-align:center;margin-top:auto}
+
+    .tag{display:inline-block;font-size:.72rem;background:var(--accent);color:var(--primary-dark);border-radius:20px;padding:3px 10px;font-weight:500;align-self:flex-start}
+
+    button,.btn{background:var(--primary);color:#fff;border:0;padding:12px 22px;min-height:44px;border-radius:30px;cursor:pointer;font-family:inherit;font-weight:500;font-size:.95rem;text-decoration:none;transition:background .2s}
+    button:hover,.btn:hover{background:var(--primary-dark)}
+
+    form.box{background:#fff;max-width:420px;margin:40px auto;padding:30px;border-radius:var(--radius);box-shadow:0 4px 18px rgba(120,70,70,.12)}
+    form.box label{display:block;margin-top:14px;font-weight:500;font-size:.9rem}
+    form.box input{width:100%;padding:11px 14px;margin-top:5px;border:1px solid #e6d5d0;border-radius:10px;font-family:inherit;background:var(--bg)}
+    form.box button{width:100%;margin-top:22px}
+    form.box a{color:var(--primary-dark)}
+
+    input:focus{outline:2px solid var(--accent);border-color:var(--primary)}
+
+    /* Accesibilidad y filtro del catálogo */
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    .subtitulo{color:var(--muted);margin:-8px 0 18px}
+    form.filtro{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+    form.filtro input{flex:1 1 200px;min-width:0;padding:10px 14px;border:1px solid #e6d5d0;border-radius:30px;background:#fff;font-family:inherit}
+    form.filtro button{margin-top:0}
+
+    /* Responsive */
+    @media (max-width:640px){
+      nav{padding:10px 14px;flex-direction:column;align-items:flex-start}
+      nav .logo{font-size:1.4rem}
+      nav div{display:flex;flex-wrap:wrap;align-items:center;gap:0 14px;width:100%}
+      nav a,nav span{margin-left:0}
+      main{margin:18px auto}
+      h1{font-size:1.6rem}
+      .grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
+      .card img,.card .noimg{height:150px}
+      .card > div:not(.noimg){padding:12px}
+      .card .precio{font-size:1.1rem}
+      form.box{margin:20px auto;padding:20px}
+    }
   </style>
 </head>
 <body>
@@ -31,8 +95,11 @@
     {% if request.session.usuario %}
       <span>Hola, {{ request.session.usuario.nombre }} ({{ request.session.usuario.rol }})</span>
       {% if request.session.usuario.rol == "administrador" %}
-      <a href="{% url 'panel_admin' %}">Panel admin</a>
-     {% endif %}
+        <a href="{% url 'panel_admin' %}">Panel admin</a>
+      {% endif %}
+      {% if request.session.usuario.rol == "cliente" %}
+        <a href="{% url 'mis_pedidos' %}">Mis pedidos</a>
+      {% endif %}
       <a href="{% url 'logout' %}">Salir</a>
     {% else %}
       <a href="{% url 'login' %}">Iniciar sesión</a>
@@ -44,5 +111,6 @@
   {% for m in messages %}<div class="msg {{ m.tags }}">{{ m }}</div>{% endfor %}
   {% block content %}{% endblock %}
 </main>
+<footer>© 2026 TechGear · Hecho con cariño</footer>
 </body>
 </html>

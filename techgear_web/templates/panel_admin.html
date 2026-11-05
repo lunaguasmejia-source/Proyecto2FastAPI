@@ -1,8 +1,54 @@
 {% extends "base.html" %}
 {% block title %}Panel admin · TechGear{% endblock %}
 {% block content %}
-<h1>Panel de administración</h1>
-<p>Bienvenido, {{ request.session.usuario.nombre }}. Aquí se gestionarán los productos.</p>
-<a class="btn" href="{% url 'catalogo' %}">Ver catálogo</a>
-<a class="btn" href="{% url 'producto_nuevo' %}">Agregar producto</a>
+<style>
+  .tabla-wrap{overflow-x:auto;background:#fff;border-radius:var(--radius,12px);box-shadow:0 4px 18px rgba(120,70,70,.10)}
+  table.productos{width:100%;border-collapse:collapse;min-width:640px}
+  table.productos th,table.productos td{padding:12px 14px;text-align:left;border-bottom:1px solid #f0e4df;vertical-align:middle}
+  table.productos th{font-size:.8rem;text-transform:uppercase;color:#7a6a6a}
+  table.productos img,.thumb{width:52px;height:52px;object-fit:cover;border-radius:10px;background:#f4d9d0;display:block}
+  .acciones{display:flex;gap:8px;align-items:center}
+  .acciones form{margin:0}
+  .btn-sm{padding:7px 14px;font-size:.85rem;margin-top:0}
+  .btn-sec{background:#fff;color:#8f4256;border:1px solid #8f4256}
+  .btn-sec:hover{background:#f4d9d0}
+  .btn-danger{background:#c0392b}
+  .btn-danger:hover{background:#962d22}
+</style>
+
+<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:16px">
+  <h1 style="margin:0">Panel de administración</h1>
+  <a class="btn" href="{% url 'producto_nuevo' %}" style="margin:0">+ Agregar producto</a>
+</div>
+
+<div class="tabla-wrap">
+  <table class="productos">
+    <thead>
+      <tr><th></th><th>Producto</th><th>Categoría</th><th>Precio</th><th>Stock</th><th>Acciones</th></tr>
+    </thead>
+    <tbody>
+      {% for p in productos %}
+      <tr>
+        <td>{% if p.imagen_url %}<img src="{{ p.imagen_url }}" alt="">{% else %}<div class="thumb"></div>{% endif %}</td>
+        <td><strong>{{ p.nombre }}</strong></td>
+        <td>{{ p.categoria }}</td>
+        <td>${{ p.precio|floatformat:"0g" }}</td>
+        <td>{{ p.stock }}</td>
+        <td>
+          <div class="acciones">
+            <a class="btn btn-sm btn-sec" href="{% url 'producto_editar' p.id %}">Editar</a>
+            <form method="post" action="{% url 'producto_eliminar' p.id %}"
+                  onsubmit="return confirm('¿Eliminar &quot;{{ p.nombre|escapejs }}&quot;? Esta acción no se puede deshacer.');">
+              {% csrf_token %}
+              <button type="submit" class="btn-sm btn-danger">Eliminar</button>
+            </form>
+          </div>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="6">Aún no hay productos. Agrega el primero.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 {% endblock %}
