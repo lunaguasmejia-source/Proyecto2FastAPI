@@ -1,7 +1,7 @@
 import requests
 from django.conf import settings
 
-TIMEOUT = 20
+TIMEOUT = 60
 
 
 class ApiError(Exception):
@@ -11,8 +11,12 @@ class ApiError(Exception):
         self.detail = detail
 
 
-def _request(method, path, token=None, **kwargs):
-    headers = {"Authorization": f"Bearer {token}"} if token else {}
+def _request(method, path, token=None, api_key=None, **kwargs):
+    headers = {}
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
+    if api_key:
+        headers["X-API-Key"] = api_key
     try:
         r = requests.request(
             method, f"{settings.API_URL}{path}",
@@ -27,7 +31,6 @@ def _request(method, path, token=None, **kwargs):
         raise ApiError(r.status_code, detail)
     return r.json() if r.content else None
 
-
 def login(email, password):
     return _request("POST", "/usuarios/login", json={"email": email, "password": password})
 
@@ -40,3 +43,6 @@ def registro(nombre, email, password):
 def listar_productos(categoria=None):
     params = {"categoria": categoria} if categoria else {}
     return _request("GET", "/productos/", params=params)
+
+def crear_producto(datos):
+    return _request("POST", "/productos/", api_key=settings.API_KEY, json=datos)

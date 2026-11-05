@@ -23,12 +23,16 @@ load_dotenv(BASE_DIR / ".env")
 # See https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-m#0r$z(qs_-lv5au^bo(zd2#q)=u^-^x%^mp0-h(zh#3i5hm*u'
+SECRET_KEY = os.environ.get("SECRET_KEY", "clave-solo-para-desarrollo")
+DEBUG = os.environ.get("DEBUG", "True") == "True"
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+ALLOWED_HOSTS = [".vercel.app", "127.0.0.1", "localhost"]
+CSRF_TRUSTED_ORIGINS = ["https://*.vercel.app"]
 
-ALLOWED_HOSTS = []
+# Sesiones en cookie firmada (Vercel no tiene disco persistente)
+SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
+SESSION_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_SECURE = not DEBUG
 
 
 # Application definition
@@ -70,6 +74,7 @@ LANGUAGE_CODE = "es"
 TIME_ZONE = "America/Bogota"
 
 API_URL = os.environ.get("API_URL", "http://127.0.0.1:8000")
+API_KEY = os.environ.get("API_KEY", "")
 SESSION_COOKIE_AGE = 3600     # 1 hora, igual que el JWT
 
 WSGI_APPLICATION = 'techgear_web.wsgi.application'

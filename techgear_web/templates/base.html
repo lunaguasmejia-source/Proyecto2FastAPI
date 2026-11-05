@@ -30,6 +30,9 @@
     <a href="{% url 'catalogo' %}">Catálogo</a>
     {% if request.session.usuario %}
       <span>Hola, {{ request.session.usuario.nombre }} ({{ request.session.usuario.rol }})</span>
+      {% if request.session.usuario.rol == "administrador" %}
+      <a href="{% url 'panel_admin' %}">Panel admin</a>
+     {% endif %}
       <a href="{% url 'logout' %}">Salir</a>
     {% else %}
       <a href="{% url 'login' %}">Iniciar sesión</a>
