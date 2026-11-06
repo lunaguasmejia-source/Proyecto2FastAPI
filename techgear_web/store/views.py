@@ -43,7 +43,6 @@ def login_view(request):
             else:
                 request.session["token"] = data["access_token"]
                 request.session["usuario"] = data["usuario"]
-                messages.success(request, f"Bienvenido, {data['usuario']['nombre']}")
                 if rol_real == "administrador":
                     return redirect("panel_admin")
                 destino = request.GET.get("next", "")
@@ -72,7 +71,6 @@ def registro_view(request):
 
 def logout_view(request):
     request.session.flush()       # borra token y datos de la sesión
-    messages.info(request, "Sesión cerrada")
     return redirect("catalogo")
 
 def _datos_producto(post):
